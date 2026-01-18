@@ -1,0 +1,8 @@
+# Ignore artifacts:
+node_modules
+dist
+src-tauri
+
+# Ignore environment files:
+*.env
+.env.*
