@@ -1,0 +1,6 @@
+body {
+  /* Set the background color to transparent */
+  /* If this is not done, the app will always be opaque no matter how much opacity we give to components */
+  /* We'll be handling the opacity of components  */
+  background-color: transparent;
+}
