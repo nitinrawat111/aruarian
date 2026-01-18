@@ -13,8 +13,21 @@
     "windows": [
       {
         "title": "aruarian",
+        "label": "launcher",
         "width": 800,
-        "height": 600
+        "height": 400,
+        "center": true,
+        "alwaysOnTop": true,
+        "hiddenTitle": true,
+        "decorations": false,
+        "resizable": false,
+        "focusable": false,
+        "closable": false,
+        "maximizable": false,
+        "minimizable": false,
+        "acceptFirstMouse": true,
+        "skipTaskbar": true,
+        "transparent": true
       }
     ],
     "security": {
