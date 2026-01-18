@@ -1,52 +1,46 @@
-# Reference: https://v1.tauri.app/v1/guides/getting-started/prerequisites/#setting-up-linux
+# Tauri V1 flake reference: https://v1.tauri.app/v1/guides/getting-started/prerequisites/#setting-up-linux
+# Tauri V2 nix shell reference: https://wiki.nixos.org/wiki/Tauri
 {
+  description = "Tauri dev shell";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
-    fenix.url = "github:nix-community/fenix";
   };
 
-  outputs = { self, nixpkgs, flake-utils, fenix }:
+  outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
-
-        rustToolchain = fenix.packages.${system}.stable.withComponents [
-          "rustc"
-          "cargo"
-          "rustfmt"
-          "clippy"
-          "rust-src"
-        ];
-      in {
-        devShell = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            rustToolchain
-            rust-analyzer
-
-            # Node.js
-            nodejs_24
-
-            # Build tools
+        pkgs = import nixpkgs {
+          inherit system;
+        };
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          nativeBuildInputs = with pkgs; [
             pkg-config
-            curl
-            wget
+            gobject-introspection
+            cargo
+            nodejs_24
+          ];
 
-            # Tauri deps
-            dbus
+          buildInputs = with pkgs; [
+            at-spi2-atk
+            atkmm
+            cairo
+            gdk-pixbuf
             glib
             gtk3
+            harfbuzz
+            librsvg
             libsoup_3
+            pango
             webkitgtk_4_1
             openssl
-            librsvg
-            gdk-pixbuf
-            cairo
           ];
 
           shellHook = ''
-            export RUST_SRC_PATH="${rustToolchain}/lib/rustlib/src/rust/library"
-            export XDG_DATA_DIRS=${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS
+            echo "Tauri dev shell ready"
           '';
         };
       }
