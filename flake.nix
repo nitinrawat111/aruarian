@@ -22,6 +22,7 @@
             gobject-introspection
             cargo
             nodejs_24
+            rustup
           ];
 
           buildInputs = with pkgs; [
@@ -40,7 +41,17 @@
           ];
 
           shellHook = ''
-            echo "Tauri dev shell ready"
+          export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [
+            pkgs.gtk3
+            pkgs.gdk-pixbuf
+            pkgs.glib
+            pkgs.cairo
+            pkgs.pango
+            pkgs.webkitgtk_4_1
+            pkgs.libsoup_3
+          ]}
+          rustup default stable
+          echo "Tauri dev shell ready"
           '';
         };
       }
