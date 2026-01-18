@@ -27,7 +27,8 @@
         "minimizable": false,
         "acceptFirstMouse": true,
         "skipTaskbar": true,
-        "transparent": true
+        "transparent": true,
+        "visible": false
       }
     ],
     "security": {

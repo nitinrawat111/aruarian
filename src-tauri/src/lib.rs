@@ -38,15 +38,12 @@ pub fn run() {
             // But that seemed expensive, so instead decided to hide/unhide the same window
 
             // "launcher" is the label of the window defined in tauri.conf.json
+            // The window is initially hidden (see tauri.conf.json)
             let launcher_window = app
                 .get_webview_window("launcher")
                 .expect("Failed to get launcher window");
-            // Hide the launcher window on startup
-            launcher_window
-                .hide()
-                .expect("Failed to hide launcher window on startup");
 
-            // Also attach an event listener to hide the launcher window when it loses focus
+            // Attach an event listener to hide the launcher window when it loses focus
             launcher_window.clone().on_window_event(move |event| {
                 if let tauri::WindowEvent::Focused(false) = event {
                     launcher_window
