@@ -1,12 +1,13 @@
 {
   "identifier": "desktop-capability",
+  "description": "Capability for desktop platforms",
   "platforms": [
     "macOS",
     "windows",
     "linux"
   ],
   "windows": [
-    "main"
+    "launcher"
   ],
   "permissions": [
     "global-shortcut:default"

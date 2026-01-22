@@ -9,6 +9,8 @@ import {
 import "@mantine/core/styles.css";
 import "@mantine/spotlight/styles.css";
 import "./global.css";
+import { useEffect } from "react";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 
 // Dummy actions for now
 // TODO: Replace with real actions
@@ -37,6 +39,34 @@ const actions: SpotlightActionData[] = [
 ];
 
 export function App() {
+  useEffect(() => {
+    // We already have a event listener to hide the window when it goes out of focus (in Rust)
+    // But we also want to attach a keydown listener to close the window when Escape is pressed
+    // This could have been a global listener but that would listen unnecessarily when the window is hidden
+    // Simpler to keep this listener local to the window
+    //
+    // Also, we are hiding the window when super/alt is pressed.
+    // (Alt/Super + Tab) make the window loose focus but this event is not captured for some reason (on Gnome, X11)
+    const onEscape = (event: KeyboardEvent) => {
+      console.log("Key pressed:", event.key);
+      if (
+        event.key === "Escape" ||
+        event.key === "Alt" ||
+        event.key === "Super"
+      ) {
+        const window = getCurrentWindow();
+        window.hide().catch((err) => {
+          console.error("Failed to hide window:", err);
+        });
+      }
+    };
+    window.addEventListener("keydown", onEscape);
+
+    return () => {
+      window.removeEventListener("keydown", onEscape);
+    };
+  }, []);
+
   return (
     <MantineProvider defaultColorScheme="dark">
       <Spotlight

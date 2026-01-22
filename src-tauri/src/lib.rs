@@ -21,10 +21,18 @@ pub fn run() {
             if shortcut.matches(Modifiers::SUPER, Code::Space) {
                 // Open the launcher window when the shortcut is pressed
                 // "launcher" is the label of the window defined in tauri.conf.json
-                app.get_webview_window("launcher")
-                    .expect("Failed to get launcher window")
+                let launcher_window = app
+                    .get_webview_window("launcher")
+                    .expect("Failed to get launcher window");
+                launcher_window
                     .show()
                     .expect("Failed to show launcher window");
+                // Move focus to the launcher window so that user can start typing immediately
+                // TODO: This does not work on Gnome(X11). Need a fix for this.
+                // @see https://github.com/tauri-apps/tauri/issues/6310
+                launcher_window
+                    .set_focus()
+                    .expect("Failed to focus launcher window");
             }
         })
         .build();
